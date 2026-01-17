@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodDash Admin - Table Bookings</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .sidebar-item-active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+
+        .booking-row {
+            transition: all 0.2s ease;
+        }
+
+        .booking-row:hover {
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            transform: scale(1.005);
+        }
+
+        .search-box {
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
+            transform: scale(1.02);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-confirmed {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .status-pending {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+
+        .status-cancelled {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .avatar-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .btn-view {
+            transition: all 0.2s ease;
+        }
+
+        .btn-view:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .date-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(240, 147, 251, 0.3);
+        }
+
+        .time-badge {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 0.375rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .guests-badge {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(67, 233, 123, 0.3);
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-purple-50 to-blue-50">
+
+<div class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-72 glass-effect flex flex-col shrink-0 shadow-2xl">
+        <div class="p-8">
+            <div class="flex items-center gap-3">
+                <div class="gradient-bg p-3 rounded-2xl shadow-lg">
+                    <span class="text-2xl">⚡</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black tracking-tight bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">FOODDASH</h1>
+                    <p class="text-xs text-slate-500 font-medium">Admin Portal</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-4 space-y-2 custom-scrollbar overflow-y-auto">
+            <a href="index.html" class="flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-medium text-slate-700 hover:bg-white hover:shadow-md transition-all">
+                <span class="text-xl">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="products.html" class="flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-medium text-slate-700 hover:bg-white hover:shadow-md transition-all">
+                <span class="text-xl">🛍</span>
+                <span>Products</span>
+            </a>
+            <a href="table-bookings.html" class="sidebar-item-active flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-semibold transition-all">
+                <span class="text-xl">📅</span>
+                <span>Table Bookings</span>
+            </a>
+            <a href="user-accounts.html" class="flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-medium text-slate-700 hover:bg-white hover:shadow-md transition-all">
+                <span class="text-xl">👤</span>
+                <span>User Accounts</span>
+            </a>
+            <a href="payments.html" class="flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-medium text-slate-700 hover:bg-white hover:shadow-md transition-all">
+                <span class="text-xl">💳</span>
+                <span>Payments</span>
+            </a>
+        </nav>
+
+        <div class="p-6 border-t border-slate-200">
+            <button onclick="logout()" class="flex items-center gap-3 w-full px-5 py-3 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 transition-all">
+                <span class="text-xl">⏻</span>
+                <span>Logout</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+
+        <!-- HEADER -->
+        <header class="h-24 glass-effect border-b border-white/50 px-8 flex items-center justify-between shadow-sm">
+            <div class="flex-1 max-w-xl">
+                <input id="bookingSearch" type="text"
+                       placeholder="🔍 Search by name, booking ID, or date..."
+                       class="search-box w-full px-6 py-3 bg-white rounded-2xl text-sm outline-none border border-slate-200 font-medium">
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button class="relative p-3 hover:bg-white rounded-xl transition-all">
+                    <span class="text-2xl">🔔</span>
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                <a href="profile.html" class="flex items-center gap-3 px-5 py-2.5 bg-white rounded-xl hover:shadow-md transition-all">
+                    <div class="w-8 h-8 gradient-bg rounded-full flex items-center justify-center text-white font-bold text-sm">A</div>
+                    <span class="font-semibold text-slate-700">Admin</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- CONTENT -->
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+            <div class="max-w-7xl mx-auto">
+
+                <!-- HEADER SECTION -->
+                <div class="mb-8 animate-fade-in">
+                    <h2 class="text-3xl font-black text-slate-800 mb-2">Table Bookings 📅</h2>
+                    <p class="text-slate-600">Review and manage customer reservations</p>
+                </div>
+
+                <!-- BOOKINGS TABLE -->
+                <div class="bg-white rounded-3xl shadow-lg border border-white/50 overflow-hidden animate-fade-in" style="animation-delay: 0.1s">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gradient-to-r from-slate-50 to-purple-50">
+                                <tr>
+                                    <th class="px-8 py-5 text-left text-xs font-black text-slate-600 uppercase tracking-wider">Booking Details</th>
+                                    <th class="px-8 py-5 text-left text-xs font-black text-slate-600 uppercase tracking-wider">Customer</th>
+                                    <th class="px-8 py-5 text-center text-xs font-black text-slate-600 uppercase tracking-wider">Guests</th>
+                                    <th class="px-8 py-5 text-left text-xs font-black text-slate-600 uppercase tracking-wider">Schedule</th>
+                                    <th class="px-8 py-5 text-right text-xs font-black text-slate-600 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookingsTable" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- EMPTY STATE -->
+                    <div id="emptyState" class="hidden py-16 text-center">
+                        <div class="text-6xl mb-4">📅</div>
+                        <h3 class="text-xl font-bold text-slate-700 mb-2">No bookings found</h3>
+                        <p class="text-slate-500">Reservations will appear here once customers book tables</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+const API_BASE = "https://lychou19.pythonanywhere.com/api";
+const TOKEN = localStorage.getItem("access_token");
+
+if (!TOKEN) logout();
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "login.html";
+}
+
+// GET STATUS CLASS
+function getStatusBadge(paymentStatus) {
+    const statusMap = {
+        'paid': { class: 'status-confirmed', icon: '✓', text: 'Confirmed' },
+        'pending': { class: 'status-pending', icon: '⏱', text: 'Pending' },
+        'cancelled': { class: 'status-cancelled', icon: '✕', text: 'Cancelled' }
+    };
+    return statusMap[paymentStatus] || statusMap['pending'];
+}
+
+// FORMAT DATE
+function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    const options = { month: 'short', day: 'numeric', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}
+
+// FETCH BOOKINGS
+fetch(`${API_BASE}/admin/bookings/`, {
+    headers: {
+        "Authorization": `Bearer ${TOKEN}`
+    }
+})
+.then(res => {
+    if (res.status === 401) {
+        logout();
+        throw new Error("Unauthorized");
+    }
+    return res.json();
+})
+.then(bookings => {
+    const tbody = document.getElementById("bookingsTable");
+    const emptyState = document.getElementById("emptyState");
+    
+    tbody.innerHTML = "";
+
+    if (bookings.length === 0) {
+        emptyState.classList.remove("hidden");
+        return;
+    }
+
+    bookings.forEach(b => {
+        const status = getStatusBadge(b.payment_status);
+        const initial = b.customer_name?.charAt(0).toUpperCase() || "?";
+        const formattedDate = formatDate(b.date);
+
+        tbody.innerHTML += `
+        <tr class="booking-row">
+            <td class="px-8 py-5">
+                <div class="flex flex-col gap-2">
+                    <div class="text-xs text-slate-500 font-semibold">ID: #BK-${String(b.id).padStart(4, '0')}</div>
+                    <span class="status-badge ${status.class}">
+                        <span>${status.icon}</span>
+                        <span>${status.text}</span>
+                    </span>
+                </div>
+            </td>
+
+            <td class="px-8 py-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 avatar-gradient rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                        ${initial}
+                    </div>
+                    <div>
+                        <div class="font-bold text-slate-800">${b.customer_name}</div>
+                        <div class="text-xs text-slate-500">Customer</div>
+                    </div>
+                </div>
+            </td>
+
+            <td class="px-8 py-5">
+                <div class="flex justify-center">
+                    <div class="guests-badge">
+                        <span class="text-xs font-medium">👥</span>
+                        <span class="text-lg font-black">${b.guests}</span>
+                    </div>
+                </div>
+            </td>
+
+            <td class="px-8 py-5">
+                <div class="flex flex-col gap-2">
+                    <div class="date-card inline-flex items-center gap-2 w-fit">
+                        <span class="text-sm">📆</span>
+                        <span class="font-bold text-sm">${formattedDate}</span>
+                    </div>
+                    <div class="time-badge inline-flex w-fit">
+                        <span>🕐</span>
+                        <span>${b.time}</span>
+                    </div>
+                </div>
+            </td>
+
+            <td class="px-8 py-5 text-right">
+                <button onclick="viewBooking(${b.id})" class="btn-view px-5 py-2.5 gradient-bg text-white rounded-xl font-semibold text-sm shadow-md">
+                    👁️ View Details
+                </button>
+            </td>
+        </tr>`;
+    });
+})
+.catch(err => {
+    console.error(err);
+    const emptyState = document.getElementById("emptyState");
+    emptyState.classList.remove("hidden");
+    emptyState.innerHTML = `
+        <div class="text-6xl mb-4">⚠️</div>
+        <h3 class="text-xl font-bold text-slate-700 mb-2">Error loading bookings</h3>
+        <p class="text-slate-500">Please try refreshing the page</p>
+    `;
+});
+
+// SEARCH
+document.getElementById("bookingSearch").addEventListener("input", e => {
+    const k = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll("#bookingsTable tr");
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+        const isVisible = row.innerText.toLowerCase().includes(k);
+        row.style.display = isVisible ? "" : "none";
+        if (isVisible) visibleCount++;
+    });
+
+    // Show empty state if no results
+    const emptyState = document.getElementById("emptyState");
+    if (visibleCount === 0 && k !== "") {
+        emptyState.classList.remove("hidden");
+        emptyState.innerHTML = `
+            <div class="text-6xl mb-4">🔍</div>
+            <h3 class="text-xl font-bold text-slate-700 mb-2">No bookings found</h3>
+            <p class="text-slate-500">Try adjusting your search terms</p>
+        `;
+    } else if (visibleCount > 0) {
+        emptyState.classList.add("hidden");
+    }
+});
+
+// VIEW BOOKING DETAILS
+function viewBooking(id) {
+    alert(`View details for Booking #BK-${String(id).padStart(4, '0')} - Feature coming soon!`);
+}
+</script>
+
+</body>
+</html>
